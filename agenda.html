@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Samoja</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="https://multisite.bandung.go.id/kelurahan-antapani-kidul/wp-content/uploads/sites/90/2021/03/logokotabandung-150x150.png" rel="icon">
+  <link href="https://multisite.bandung.go.id/kelurahan-antapani-kidul/wp-content/uploads/sites/90/2021/03/logokotabandung.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="assets/css/main.css" rel="stylesheet">
+  
+  <!-- =======================================================
+  * Template Name: Amoeba
+  * Template URL: https://bootstrapmade.com/free-one-page-bootstrap-template-amoeba/
+  * Updated: Aug 07 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body class="index-page">
+
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+
+      <a href="index.html" class="logo d-flex align-items-center">
+        <!-- Uncomment the line below if you also wish to use an image logo -->
+        <img src="https://multisite.bandung.go.id/kelurahan-antapani-kidul/wp-content/uploads/sites/90/elementor/thumbs/logokotabandung-pdgytzlbkobrzy9hvkaphzg3pp7vr99ebhtybabmak.png" alt="">
+        <h1 class="sitename">Samoja</h1>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="index.html#hero" target="_blank">Beranda</a></li>
+          <li><a href="index.html#layanan" target="_blank">Pelayanan</a></li>
+          <li><a href="index.html#galeri" target="_blank">Galeri</a></li>
+          <li class="dropdown"><a href="#"><span>PPID</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <ul>
+              <li><a href="index.html#visi-tab" target="_blank">Visi Misi</a></li>
+              <li><a href="index.html#ppid" target="_blank">Struktur Organisasi</a></li>
+              <li><a href="index.html#program-tab" target="_blank">Program dan Kegiatan</a></li>
+              <li><a href="index.html#profil-tab" target="_blank">Profil Kelurahan</a></li>
+              <li><a href="#">Pengumuman</a></li>
+              <li><a href="#">Agenda Kegiatan</a></li>
+              <li><a href="#footer">Hubungi Kami</a></li>
+            </ul>
+          </li><li class="dropdown" class="active"><a href="#"><span> Data dan Informasi</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <ul>
+              <li><a href="prodeskel.html" target="_blank">e-Prodeskel</a></li>
+              <li><a href="penduduk.html" target="_blank">Kependudukan</a></li>
+              <li><a href="pendidikan.html" target="_blank">Pendidikan</a></li>
+              <li><a href="kesehatan.html" target="_blank">Kesehatan</a></li>
+              <li><a href="agama.html" target="_blank">Agama</a></li>
+              <li><a href="ekonomi.html" target="_blank">Ekonomi</a></li>
+              <li><a href="lainnya.html" target="_blank">Lainnya</a></li>
+            </ul>
+          </li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- Hero Section -->
+    <section id="profil" class="hero section dark-background">
+
+      <img src="https://img.bandung.go.id/images/slider/2022/02/14/header/166374430249-balai-kota-desktop.jpg" alt="" data-aos="fade-in">
+
+      <div class="container text-center" data-aos="fade-up">
+        <div class="row justify-content-center">
+			<h2>Agenda Kegiatan</h2>
+			<br><br>
+			<div id="kalender"></div>
+		</div>
+      </div><!-- Card Item -->
+
+    </section><!-- /Cards Section -->
+	
+	<!-- TAUTAN WEB -->
+    <section id="clients" class="clients section gray-background">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="swiper init-swiper">
+          <script type="application/json" class="swiper-config">
+				{
+					"loop": true,
+					"speed": 600,
+					"autoplay": {
+						"delay": 5000
+					},
+					"slidesPerView": "auto",
+					"pagination": {
+						"el": ".swiper-pagination",
+						"type": "bullets",
+						"clickable": true
+					},
+					"breakpoints": {
+						"320": {
+							"slidesPerView": 2,
+							"spaceBetween": 40
+						},
+						"480": {
+							"slidesPerView": 3,
+							"spaceBetween": 60
+						},
+						"640": {
+							"slidesPerView": 4,
+							"spaceBetween": 80
+						},
+						"992": {
+							"slidesPerView": 6,
+							"spaceBetween": 120
+						}
+					}
+				}
+			</script>
+          <div class="swiper-wrapper align-items-center">
+				<div class="swiper-slide">
+					<a href="https://bandung.go.id" target="_blank">
+						<img src="https://www.bandung.go.id/assets/img/logo.png" class="img-fluid" alt="">
+					</a>
+				</div>
+				<div class="swiper-slide">
+					<a href="https://opendata.bandung.go.id/" target="_blank">
+						<img src="https://opendata.bandung.go.id/api/static/upload/b0f003b3850d3f74df6ec4988b1d67dd7235f473ca4c6c91379f2e6549a48f04.png" class="img-fluid" alt="">
+					</a>
+				</div>
+				<div class="swiper-slide">
+					<a href="https://www.lapor.go.id/" target="_blank">
+						<img src="https://www.lapor.go.id/themes/lapor/assets/images/logo.png" class="img-fluid" alt="">
+					</a>
+				</div>
+				<div class="swiper-slide">
+					<a href="https://www.lapor.go.id" target="_blank">
+						<img src="https://www.lapor.go.id/themes/lapor/assets/images/logo-panrb.png" class="img-fluid" alt="">
+					</a>
+				</div>
+				<div class="swiper-slide">
+					<a href="https://bandungkota.bps.go.id/id" target="_blank">
+						<img src="https://www.bps.go.id/_next/image?url=%2Fassets%2Flogo-bps.png&w=1080&q=75" class="img-fluid" alt="">
+					</a>
+				</div>
+				<div class="swiper-slide">
+					<a href="http://ombudsman.go.id/" target="_blank">
+						<img src="https://www.lapor.go.id/themes/lapor/assets/images/3-footer.png" class="img-fluid" alt="">
+					</a>
+				</div>
+				<div class="swiper-slide">
+					<a href="https://e-prodeskel.kemendagri.go.id/v/2025/data-pokok" target="_blank">
+						<img src="https://kemendagri.go.id/img/Logokemendagri.caf3fca0.svg" class="img-fluid" alt="">
+					</a>
+				</div>
+			</div>
+			<div class="swiper-pagination"></div>
+		</div>
+
+      </div>
+
+    </section><!-- /Clients Section -->
+    
+	<!-- PEMBATAS -->
+    <div id="" class="row footer dark-background"></div>
+	
+  </main>
+
+  <footer id="footer" class="footer accent-background">
+
+    <div class="container">
+      <div class="row gy-3">
+        <div class="col-lg-3 col-md-6 d-flex">
+          <i class="bi bi-geo-alt icon"></i>
+          <div class="address">
+            <h4>Alamat</h4>
+            <p>Jl. Centeh No. 38</p>
+            <p>Bandung 40273</p>
+            <p></p>
+          </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6 d-flex">
+          <i class="bi bi-telephone icon"></i>
+          <div>
+            <h4>Hubungi Kami</h4>
+            <p>
+              <strong>Phone:</strong> <span>+62 0882-2456-0713</span><br>
+			  <strong>Email:</strong> <span>-</span><br>
+            </p>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 d-flex">
+          <i class="bi bi-clock icon"></i>
+          <div>
+            <h4>Jam Pelayanan</h4>
+            <p>
+              <strong>Senin - Kamis:</strong> <span>08.00 - 15.30 WIB</span><br>
+              <strong>Jumat</strong>: <span>09.00 - 15.30 WIB</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <h4>Ikuti Kami</h4>
+          <div class="social-links d-flex">
+            <a href="" class="twitter"><i class="bi bi-twitter-x"></i></a>
+            <a href="https://www.facebook.com/KelurahanSamoja/" class="facebook"><i class="bi bi-facebook"></i></a>
+            <a href="https://www.instagram.com/kelurahan_samoja/" class="instagram"><i class="bi bi-instagram"></i></a>
+            <a href="https://www.youtube.com/channel/UCxSaBp5-TV5zben-ns35pog" class="youtube"><i class="bi bi-youtube"></i></a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="container copyright text-center mt-4">
+      <p>Tim IT © <span>2025</span> <strong class="px-1 sitename">Kelurahan Samoja</strong></p>
+      <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you've purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      </div>
+    </div>
+
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+  
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/js/main.js"></script>
+	
+	<script>
+		var tanggal = new Date();
+
+			function buatKalender() {
+				var hariIni = tanggal.getDate(),
+					bulanIni = tanggal.getMonth(),
+					tahunIni = tanggal.getFullYear(),
+					hariPertama = new Date(tahunIni, bulanIni, 1),
+					hariTerakhir = new Date(tahunIni, bulanIni + 1, 0),
+					htmlKalender = '<table><tr>';
+
+				// Menambahkan nama hari
+				var namaHari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+				namaHari.forEach(function(hari) {
+					htmlKalender += '<th>' + hari + '</th>';
+				});
+				
+				htmlKalender += '</tr><tr>';
+
+				// Mengisi sel kosong sebelum hari pertama bulan ini
+				for (var i = 0; i < hariPertama.getDay(); i++) {
+					htmlKalender += '<td></td>';
+				}
+
+				// Mengisi tanggal
+				for (var i = 1; i <= hariTerakhir.getDate(); i++) {
+					if (i === hariIni) {
+						htmlKalender += '<td class="hari-ini">' + i + '</td>';
+					} else {
+						htmlKalender += '<td>' + i + '</td>';
+					}
+
+					if ((i + hariPertama.getDay()) % 7 === 0) {
+						htmlKalender += '</tr><tr>';
+					}
+				}
+
+				htmlKalender += '</tr></table>';
+				document.getElementById('kalender').innerHTML = htmlKalender;
+			}
+
+			buatKalender();
+
+	</script>
+    <script src="https://cdn.botpress.cloud/webchat/v2.2/inject.js"></script>
+    <script src="https://files.bpcontent.cloud/2025/01/04/03/20250104035620-PTG96A7D.js"></script>
+
+</body>
+
+</html>

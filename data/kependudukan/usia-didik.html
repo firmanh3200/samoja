@@ -1,0 +1,327 @@
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samoja</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <link href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.css" rel="stylesheet">
+	<link href="https://cdn.datatables.net/buttons/3.2.0/css/buttons.dataTables.css" rel="stylesheet">
+	<link href="https://cdn.datatables.net/select/3.0.0/css/select.dataTables.css" rel="stylesheet">
+	<link href="https://code.highcharts.com/css/highcharts.css" rel="stylesheet">
+    <style>
+        #barChart, #pieChartCanvas {
+            height: 100%;
+			width: 100%;
+			max-height: 250px;
+        }
+		.card {
+			padding: 20px;
+			margin: 20px;
+			background-color: white;
+			border: 1px solid #ccc;
+			border-radius: 8px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Efek bayangan */
+		}
+		.card1 {
+			height: 400px; /* Atur tinggi card sesuai kebutuhan */
+			padding: 20px;
+			margin: 20px;
+			background-color: white;
+			border: 1px solid #ccc;
+			border-radius: 8px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Efek bayangan */
+		}
+		.chart-container {
+			position: relative;
+			height: 100%; /* Pastikan container mengisi tinggi card */
+		}
+
+		.canvas1 {
+			width: 100% !important; /* Pastikan canvas memenuhi lebar container */
+			height: 100% !important; /* Pastikan canvas memenuhi tinggi container */
+		}
+		
+		@media (max-width: 768px) {
+			.table-responsive {
+				display: block;
+				overflow-x: auto; /* Menambahkan scroll horizontal jika diperlukan */
+			}
+			.table {
+				display: flex;
+				flex-direction: column;
+			}
+			.table tr {
+				display: flex;
+				flex-direction: column;
+				margin-bottom: 15px;
+				border: 1px solid #ddd;
+				padding: 10px;
+				border-radius: 5px;
+			}
+			.table th, .table td {
+				display: block;
+				text-align: left;
+			}
+		}
+
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h3><center>Penduduk Samoja Berdasarkan Usia Pendidikan</center></h3>
+		<br>
+        <div class="row">
+			<div class="col-md-12">
+				<div class="card">
+					<div class="table-responsive">
+                        <table id="tabel" class="display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Kode Kemendagri</th>
+                                    <th>Kode BPS</th>
+                                    <th>Nama Kelurahan</th>
+                                    <th>Tahun</th>
+                                    <th>Semester</th>
+                                    <th>Kelompok Usia</th>
+                                    <th>Jumlah Penduduk</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-body"></tbody>
+					    </table>
+                    </div>
+				</div>
+			</div>
+		</div>
+		<br><br>
+        <div class="row">
+            <div class="col-md-6">
+				<div class="card">
+					<label for="filterUsiaDidik">Kelompok Usia</label>
+					<select id="filterUsiaDidik" class="form-control">
+						<!-- Opsi akan diisi dengan JavaScript -->
+					</select>
+
+					<canvas id="barChart" class="canvas1"></canvas>
+				</div>
+            </div>
+            <div class="col-md-6">
+				<div class="card">
+					<div class="row"> 
+						<div class="col-sm-4">
+							<!-- Dropdown Filter -->
+							<label for="filter-tahun">Tahun:</label>
+							<select id="filter-tahun" class="form-control"></select>
+						</div>
+						<div class="col-sm-4">
+							<label for="filter-semester">Semester:</label>
+							<select id="filter-semester" class="form-control"></select>
+						</div>
+						<div class="col-sm-4">
+							<button id="apply-filters" class="btn btn-round btn-success">Lihat Grafik</button>
+						</div>
+					</div>
+					<!-- Div untuk Menampilkan Grafik -->
+					<div id="PieChart" style="margin-top: 1px;" class="chart-display">
+						<canvas id="PieChartCanvas" class="canvas1"></canvas>
+					</div>
+				</div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+	<script src="https://cdn.datatables.net/2.2.1/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.2.0/js/dataTables.buttons.js"></script>
+	<script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.dataTables.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+	<script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.html5.min.js"></script>
+	<script src="https://cdn.datatables.net/select/3.0.0/js/dataTables.select.js"></script>
+	<script src="https://cdn.datatables.net/select/3.0.0/js/select.dataTables.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+
+    <script>
+        const url = "https://opendata.bandung.go.id/api/bigdata/dinas_kependudukan_dan_pencatatan_sipil/jumlah_penduduk_kota_bandung_berdasarkan_usia_pendidikan?sort=id%3Aasc&page=1&per_page=500&where=%7B%7D&where_or=%7B%22bps_kode_desa_kelurahan%22%3A%223273160006%22%7D";
+        
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.getElementById('table-body');
+                const years = new Set();
+                const semesters = new Set();
+                const jobData = {};
+
+                data.data.forEach(item => {
+                    const row = `<tr>
+                                <td>${item.kemendagri_kode_desa_kelurahan}</td>
+                                <td>${item.bps_kode_desa_kelurahan}</td>
+                                <td>${item.kemendagri_nama_desa_kelurahan}</td>
+                                <td>${item.tahun}</td>
+                                <td>${item.semester}</td>
+                                <td>${item.kelompok_usia_pendidikan}</td>
+                                <td>${item.jumlah_penduduk}</td>
+                                </tr>`;
+                    tableBody.innerHTML += row;
+
+                    years.add(item.tahun);
+                    semesters.add(item.semester);
+                });
+
+                $('#tabel').DataTable({
+					responsive: true,
+					info: false,
+					searching: false,
+					dom: 'Bfrtip',
+					buttons: [
+						'copy', 'csv', 'excel', 'pdf'
+					]
+				});
+				
+                
+                const usiaDidikSet = new Set(data.data.map(item => item.kelompok_usia_pendidikan));
+                usiaDidikSet.forEach(jenis => {
+                    $('#filterUsiaDidik').append(`<option value="${jenis}">${jenis}</option>`);
+                });
+
+                years.forEach(tahun => {
+                    $('#filter-tahun').append(`<option value="${tahun}">${tahun}</option>`);
+                });
+
+                semesters.forEach(semester => {
+                    $('#filter-semester').append(`<option value="${semester}">${semester}</option>`);
+                });
+
+                // Fungsi untuk membuat grafik batang
+                function renderBarChart(filteredData, selectedUsiaDidik) {
+                    // Filter data berdasarkan jenis pekerjaan terpilih
+                    const filteredByUsiaDidik = filteredData.filter(item => item.kelompok_usia_pendidikan === selectedUsiaDidik);
+
+                    // Ambil label (tahun + semester) dan jumlah penduduk untuk grafik batang
+                    const labels = filteredByUsiaDidik.map(item => `${item.tahun} - ${item.semester}`);
+                    const dataJumlahPenduduk = filteredByUsiaDidik.map(item => item.jumlah_penduduk);
+
+                    // Hapus grafik sebelumnya jika ada (untuk menghindari duplikasi)
+                    if (window.barChartInstance) {
+                        window.barChartInstance.destroy();
+                    }
+
+                    // Render grafik batang baru
+                    const ctx = document.getElementById('barChart').getContext('2d');
+                    window.barChartInstance = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: `Jumlah Penduduk (${selectedUsiaDidik})`,
+                                data: dataJumlahPenduduk,
+                                backgroundColor: 'rgba(15, 241, 13, 0.8)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+								y: {
+									beginAtZero: true
+								}
+							},
+							plugins: {
+								legend: {
+									display: true,
+									position: 'bottom' // Menempatkan legend di bawah sumbu X
+								}
+							}
+                        }
+                    });
+                }
+
+                // Fungsi untuk memperbarui grafik batang berdasarkan filter
+                function updateBarChart() {
+                    const selectedUsiaDidik = $('#filterUsiaDidik').val();
+                    
+                    // Filter data berdasarkan semua filter yang dipilih
+                    let filteredData = data.data;
+
+                    if (selectedUsiaDidik) {
+                        filteredData = filteredData.filter(item => item.kelompok_usia_pendidikan === selectedUsiaDidik);
+                    }
+
+                    // Render grafik batang hanya untuk jenis pekerjaan terpilih
+                    if (selectedUsiaDidik) {
+                        renderBarChart(filteredData, selectedUsiaDidik);
+                    } else {
+                        // Jika tidak ada jenis pekerjaan terpilih, kosongkan grafik batang
+                        if (window.barChartInstance) {
+                            window.barChartInstance.destroy();
+                        }
+                    }
+                }
+
+                $('#filterUsiaDidik').change(() => {
+                    updateBarChart(); // Hanya memperbarui grafik batang
+                });
+
+                // Fungsi untuk membuat grafik pie
+                function createChart(filteredData) {
+                    const chartData = prepareChartData(filteredData);
+
+                    Highcharts.chart('PieChart', {
+                        chart: {
+                            type: 'pie',
+                            styledMode: true
+                        },
+                        title: {
+                            text: ''
+                        },
+                        series: [
+                            {
+                                name: 'Jumlah Penduduk',
+                                colorByPoint: true,
+                                data: chartData,
+                            }
+                        ]
+                    });
+                }
+
+                function prepareChartData(filteredData) {
+                    const counts = {};
+
+                    // Hitung jumlah penduduk untuk setiap jenis pekerjaan di filteredData
+                    filteredData.forEach(item => {
+                        const usiadidik = item.kelompok_usia_pendidikan; 
+                        const jumlahPenduduk = item.jumlah_penduduk; 
+                        
+                        if (counts[usiadidik]) {
+                            counts[usiadidik] += jumlahPenduduk;
+                        } else {
+                            counts[usiadidik] = jumlahPenduduk;
+                        }
+                    });
+
+                    return Object.entries(counts).map(([name, y]) => ({ name, y }));
+                }
+
+                // Event listener untuk tombol apply filter
+                document.getElementById('apply-filters').addEventListener('click', function() {
+                    const tahun = document.getElementById('filter-tahun').value;
+                    const semester = document.getElementById('filter-semester').value;
+
+                    // Filter data berdasarkan tahun dan semester untuk grafik saja
+                    const filteredData = data.data.filter(item => {
+                        return item.tahun == tahun && item.semester == semester; 
+                    });
+
+                    createChart(filteredData); // Buat grafik dengan data yang difilter
+                });
+
+            })
+            .catch(error => console.error('Error:', error));
+    </script>
+	
+</body>
+</html>

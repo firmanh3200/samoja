@@ -1,0 +1,205 @@
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samoja</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <link href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.css" rel="stylesheet">
+	<link href="https://cdn.datatables.net/buttons/3.2.0/css/buttons.dataTables.css" rel="stylesheet">
+	<link href="https://cdn.datatables.net/select/3.0.0/css/select.dataTables.css" rel="stylesheet">
+	<link href="https://code.highcharts.com/css/highcharts.css" rel="stylesheet">
+    <style>
+        #barChart, #pieChartCanvas {
+            height: 100%;
+			width: 100%;
+			max-height: 250px;
+        }
+		.card {
+			padding: 20px;
+			margin: 20px;
+			background-color: white;
+			border: 1px solid #ccc;
+			border-radius: 8px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Efek bayangan */
+		}
+		.card1 {
+			height: 400px; /* Atur tinggi card sesuai kebutuhan */
+			padding: 20px;
+			margin: 20px;
+			background-color: white;
+			border: 1px solid #ccc;
+			border-radius: 8px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Efek bayangan */
+		}
+		.chart-container {
+			position: relative;
+			height: 100%; /* Pastikan container mengisi tinggi card */
+		}
+
+		.canvas1 {
+			width: 100% !important; /* Pastikan canvas memenuhi lebar container */
+			height: 100% !important; /* Pastikan canvas memenuhi tinggi container */
+		}
+		
+		@media (max-width: 768px) {
+			.table-responsive {
+				display: block;
+				overflow-x: auto; /* Menambahkan scroll horizontal jika diperlukan */
+			}
+			.table {
+				display: flex;
+				flex-direction: column;
+			}
+			.table tr {
+				display: flex;
+				flex-direction: column;
+				margin-bottom: 15px;
+				border: 1px solid #ddd;
+				padding: 10px;
+				border-radius: 5px;
+			}
+			.table th, .table td {
+				display: block;
+				text-align: left;
+			}
+		}
+
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2 class="text-center">Jumlah Realisasi Tanggung Jawab Sosial Lingkungan (TJSL) di Kelurahan Samoja (Rupiah)</h2>
+	<br>
+    <div class="table-responsive">
+        <table id="dataTable" class="table table-striped table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Kode Kemendagri</th>
+                    <th>Kode BPS</th>
+                    <th>Nama Kelurahan</th>
+                    <th>Nama Perusahaan</th>
+                    <th>Alamat</th>
+                    <th>Kegiatan</th>
+                    <th>Penerima</th>
+                    <th>Lokasi</th>
+                    <th>Nilai (Rp)</th>
+                    <th>Tahun</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+
+	<canvas id="myChart" width="400" height="200"></canvas>
+</div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+	<script src="https://cdn.datatables.net/2.2.1/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.2.0/js/dataTables.buttons.js"></script>
+	<script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.dataTables.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+	<script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.html5.min.js"></script>
+	<script src="https://cdn.datatables.net/select/3.0.0/js/dataTables.select.js"></script>
+	<script src="https://cdn.datatables.net/select/3.0.0/js/select.dataTables.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+
+	<script>
+	// Mengambil data dari URL API
+	fetch('https://opendata.bandung.go.id/api/bigdata/kecamatan_batununggal/jmlh_rlss_tnggng_jwb_ssl_lngkngn_tjsl_brdsrkn_klrhn_d_kcmtn_ntp?sort=id%3Aasc&page=1&per_page=100&where=%7B%22bps_kode_desa_kelurahan%22%3A%5B%223273160006%22%5D%7D&where_or=%7B%7D') // Ganti dengan URL API yang valid
+		.then(response => response.json())
+		.then(data => {
+			console.log(data);
+			if (data.code === 200) {
+				displayDataTable(data.data);
+				displayChart(data.data);
+			} else {
+				console.error('Error:', data.message);
+			}
+		})
+		.catch(error => console.error('Error:', error));
+
+	// Fungsi untuk menampilkan DataTable dengan tombol download
+	function displayDataTable(data) {
+		const tableBody = document.getElementById('tableBody');
+		tableBody.innerHTML = ''; // Clear existing data
+
+		data.forEach(item => {
+			const row = `<tr>
+				<td>${item.kemendagri_kode_desa_kelurahan}</td>
+				<td>${item.bps_kode_desa_kelurahan}</td>
+				<td>${item.kemendagri_nama_desa_kelurahan}</td>
+				<td>${item.nama_perusahaan}</td>
+				<td>${item.alamat_perusahaan}</td>
+				<td>${item.uraian}</td>
+				<td>${item.penerima}</td>
+				<td>${item.lokasi_penerima}</td>
+				<td>${item.besar_nilai}</td>
+				<td>${item.tahun}</td>
+			</tr>`;
+			tableBody.innerHTML += row;
+		});
+
+		$('#dataTable').DataTable({
+			responsive: true,
+			searching: false,
+			info: false,
+			dom: 'Bfrtip', // Menambahkan tombol di atas tabel
+			pagination: true,
+			buttons: [
+				'copy', 'csv', 'excel', 'pdf', 'print' // Tombol download yang tersedia
+			]
+		}); // Initialize DataTable
+	}
+
+	// Fungsi untuk menghitung total per jenjang_sekolah
+	function calculateTotals(data) {
+		const totals = {};
+
+		data.forEach(item => {
+			const tahun = item.tahun;
+			if (!totals[tahun]) {
+				totals[tahun] = 0; // Inisialisasi jika belum ada
+			}
+			totals[tahun] += 1; // Hitung jumlah sekolah per jenjang
+		});
+
+		return totals;
+	}
+
+	// Fungsi untuk menampilkan grafik dengan Chart.js
+	function displayChart(data) {
+		const ctx = document.getElementById('myChart').getContext('2d');
+		const labels = data.map(item => `${item.tahun}`);
+		const values = data.map(item => item.besar_nilai);
+
+		const myChart = new Chart(ctx, {
+			type: 'bar',
+			data: {
+				labels: labels,
+				datasets: [{
+					label: '',
+					data: values,
+					backgroundColor: 'rgba(75, 192, 192, 0.2)',
+					borderColor: 'rgba(75, 192, 192, 1)',
+					borderWidth: 1
+				}]
+			},
+			options: {
+				scales: {
+					y: {
+						beginAtZero: true
+					}
+				}
+			}
+		});
+	}
+	</script>
+   
+</body>
+</html>

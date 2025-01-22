@@ -1,0 +1,190 @@
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samoja</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <link href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.css" rel="stylesheet">
+	<link href="https://cdn.datatables.net/buttons/3.2.0/css/buttons.dataTables.css" rel="stylesheet">
+	<link href="https://cdn.datatables.net/select/3.0.0/css/select.dataTables.css" rel="stylesheet">
+	<link href="https://code.highcharts.com/css/highcharts.css" rel="stylesheet">
+    <style>
+        #barChart, #pieChartCanvas {
+            height: 100%;
+			width: 100%;
+			max-height: 250px;
+        }
+		.card {
+			padding: 20px;
+			margin: 20px;
+			background-color: white;
+			border: 1px solid #ccc;
+			border-radius: 8px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Efek bayangan */
+		}
+		.card1 {
+			height: 400px; /* Atur tinggi card sesuai kebutuhan */
+			padding: 20px;
+			margin: 20px;
+			background-color: white;
+			border: 1px solid #ccc;
+			border-radius: 8px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Efek bayangan */
+		}
+		.chart-container {
+			position: relative;
+			height: 100%; /* Pastikan container mengisi tinggi card */
+		}
+
+		.canvas1 {
+			width: 100% !important; /* Pastikan canvas memenuhi lebar container */
+			height: 100% !important; /* Pastikan canvas memenuhi tinggi container */
+		}
+		
+		@media (max-width: 768px) {
+			.table-responsive {
+				display: block;
+				overflow-x: auto; /* Menambahkan scroll horizontal jika diperlukan */
+			}
+			.table {
+				display: flex;
+				flex-direction: column;
+			}
+			.table tr {
+				display: flex;
+				flex-direction: column;
+				margin-bottom: 15px;
+				border: 1px solid #ddd;
+				padding: 10px;
+				border-radius: 5px;
+			}
+			.table th, .table td {
+				display: block;
+				text-align: left;
+			}
+		}
+
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h3><center>Jumlah Kepala Keluarga di Kelurahan Samoja</center></h3>
+        <div class="row">
+			<div class="col-md-12">
+				<div class="card">
+					<div class="table-responsive">
+						<table id="tabel" class="display" style="width:100%">
+							<thead>
+								<tr>
+									<th>Kode Kemendagri</th>
+									<th>Kode BPS</th>
+									<th>Nama Kelurahan</th>
+									<th>Tahun</th>
+									<th>Semester</th>
+									<th>Jumlah KK</th>
+								</tr>
+							</thead>
+							<tbody id="table-body"></tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+        <div class="row">
+            <div class="col-md-12">
+				<div class="card">
+					<canvas id="barChart" class="canvas1"></canvas>
+				</div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+	<script src="https://cdn.datatables.net/2.2.1/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.2.0/js/dataTables.buttons.js"></script>
+	<script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.dataTables.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+	<script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.html5.min.js"></script>
+	<script src="https://cdn.datatables.net/select/3.0.0/js/dataTables.select.js"></script>
+	<script src="https://cdn.datatables.net/select/3.0.0/js/select.dataTables.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+
+    <script>
+		const url = "https://opendata.bandung.go.id/api/bigdata/dinas_kependudukan_dan_pencatatan_sipil/jumlah_kepala_keluarga_berdasarkan_kelurahan_di_kota_bandung?sort=id%3Aasc&page=1&per_page=100&where=%7B%7D&where_or=%7B%22bps_kode_desa_kelurahan%22%3A%223273160006%22%7D";
+
+		fetch(url)
+			.then(response => response.json())
+			.then(data => {
+				const tableBody = document.getElementById('table-body');
+				const labels = [];
+				const jumlahKK = [];
+
+				data.data.forEach(item => {
+					const row = `<tr>
+								<td>${item.kemendagri_kode_desa_kelurahan}</td>
+								<td>${item.bps_kode_desa_kelurahan}</td>
+								<td>${item.kemendagri_nama_desa_kelurahan}</td>
+								<td>${item.tahun}</td>
+								<td>${item.semester}</td>
+								<td>${item.jumlah_kk}</td>
+								</tr>`;
+					tableBody.innerHTML += row;
+
+					const label = `${item.tahun} - ${item.semester}`;
+					labels.push(label);
+					jumlahKK.push(item.jumlah_kk);
+				});
+
+				createBarChart(labels, jumlahKK);
+
+				$('#tabel').DataTable({
+					responsive: true,
+					info: false,
+					searching: false,
+					dom: 'Bfrtip',
+					buttons: [
+						'copy', 'csv', 'excel', 'pdf'
+					]
+				});
+			})
+			.catch(error => console.error('Error:', error));
+
+		function createBarChart(labels, data) {
+			const ctx = document.getElementById('barChart').getContext('2d');
+			const barChart = new Chart(ctx, {
+				type: 'bar',
+				data: {
+					labels: labels,
+					datasets: [{
+						label: 'Jumlah Kepala Keluarga',
+						data: data,
+						backgroundColor: 'rgba(75, 192, 192, 0.6)',
+						borderColor: 'rgba(75, 192, 192, 1)',
+						borderWidth: 1
+					}]
+				},
+				options: {
+					responsive: true,
+					scales: {
+						y: {
+							beginAtZero: true
+						}
+					},
+					plugins: {
+						legend: {
+							position: 'bottom' // Memindahkan legenda ke bawah sumbu X
+						}
+					}
+				}
+			});
+		}
+	</script>
+	
+</body>
+</html>
